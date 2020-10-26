@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Orange idle</title>
+  </head>
+  <body style="background-color: blue; color: red; font-size: 20px;">
+    <div id="app">
+      <h2>ORANGE IDLe</h2>
+      You have {{player.orange}} orange You <br>
+      are producing {{f.rate()}} orange <br>
+      per second
+      <button style="background-color: green; font-size: 25px; width: 35px;">Release Reality update</button>
+      <br>
+      <button style="background-color: green; font-size: 25px; height: 20px;" @click="buyTree">Buy orange tree</button>
+      <br>Tree: <span style="color:#0f0">{{player.tree}} Cost:</span> {{f.cost()}} orange
+    </div>
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+  <script>
+  var player = {
+    orange: 9,
+    tree: 0,
+    tick: Date.now()
+  }
+
+  var f = {
+    rate: () => player.tree,
+    cost: () => (player.tree + 1) * 1.2
+  }
+
+  function tick(){
+    dt = (Date.now() - player.tick)/1000
+    player.orange += f.rate() * dt
+    player.tick = Date.now()
+  }
+  </script>
+  <script>
+  var app = new Vue({
+    el: '#app',
+    data:{
+      player,
+      f,
+      tick
+    },
+    methods:{
+      buyTree(){
+        if (player.orange > f.cost()){
+          player.orange -= f.cost()
+          player.tree ++
+        }
+      }
+    },
+    mounted(){
+      setInterval(tick, 50)
+    }
+  })
+  </script>
+</html>
